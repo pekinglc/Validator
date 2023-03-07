@@ -89,4 +89,98 @@ public class Validator {
 		int atPostion = strEmail.indexOf("@");
 		return strEmail.substring(0, atPostion);
 	}
+	
+	// get the ending of an email address
+	// String strEmail : represent the email string to fetch the ending
+	// assume it contains only one @ symbol
+	public static String fetchAfterAt(String strEmail) {
+		//store the position of @ symbol
+		int atPostion = strEmail.indexOf("@");
+		if(atPostion == strEmail.length() - 1)//if @ symbol is the last character of the email
+			return "";
+		else 
+			return strEmail.substring(atPostion + 1);
+	}
+	
+	// check if the start of a string is valid email prefix
+	// String strEmail : represent the email string to validate
+	public static boolean isPrefix(String strEmail) {
+		// fetch the string before @ sign
+		String strBeforeAt = fetchBeforeAt(strEmail);
+		// calculate the length of the prefix of email
+		int strLength = strBeforeAt.length();
+		// if the prefix has no character or the first character is not alphanumeric,return false
+		if(strLength == 0 || !isAlphaNum(strBeforeAt.charAt(0)))
+			return false;
+		// iterate every character of prefix	
+		for(int i = 1; i < strLength; i ++) {
+			char charEvery  = strBeforeAt.charAt(i);
+			if(!isPrefixChar(charEvery))// if character is not prefix character,return false
+					return false;
+			else {
+				if(isSpecialChar(charEvery, true)) {//if character is special character
+					// if the special character is the last character of prefix, return false
+					if(i == strLength - 1)
+						return false;
+					else {
+						char specialAfter = strBeforeAt.charAt(i + 1);
+						// if the character after the special character is alphanumeric,return false 
+						if(!isAlphaNum(specialAfter))
+							return false;
+							
+					}
+				}
+			}
+		
+		}
+		// if no condition is broken, then return true	
+		return true;
+		
+	}
+	
+	// check if the end of a string is a valid email domain
+	// String strEmail : represent the email string to validate
+	public static boolean isDomain(String strEmail) {
+		// fetch the string after @ symbol
+		String strDomain = fetchAfterAt(strEmail);
+		// get the length of the domain string
+		int domainLength = strDomain.length();
+		// contain at least 4 characters:first portion one, second portion two, seperated by period
+		if(domainLength < 4)
+			return false;
+		// get the position of last period since the second portion contains only letters
+		int periodPostion = strDomain.lastIndexOf(".");
+		// if no period or the number of characters after period is less than 2
+		if(periodPostion <= 0 || periodPostion >= domainLength - 2)
+			return false;
+		// get the first portion of the domain
+		String strBeforePeriod = strDomain.substring(0,periodPostion);
+		// get the second portion of the domain
+		String strAfterPeriod = strDomain.substring(periodPostion+1);
+		// check if the first portion meet the conditions required
+		for(int i = 0; i < strBeforePeriod.length(); i++) {
+			char charAtI = strBeforePeriod.charAt(i);
+			if(!isDomainChar(charAtI))// if the character is not domain character,return false
+				return false;
+			//period or dash must be followed by one or more alphanumeric characters
+			if(isSpecialChar(charAtI, false)) {
+				// if period or dash at the end, return false
+				if(i == strBeforePeriod.length() - 1)
+					return false;
+				//if period or dash not followed by one or more alphanumeric characters,return false
+				if(!isAlphaNum(strBeforePeriod.charAt(i + 1)))
+					return false;
+			}
+				
+			
+		}
+		// check if the second portion contains only letters
+		for(int i = 0; i < strAfterPeriod.length(); i ++) {
+			if(!Character.isLetter(strAfterPeriod.charAt(i)))
+				return false;
+			
+		}
+		// if all the conditions are met,return true
+		return true;
+	}
 }
