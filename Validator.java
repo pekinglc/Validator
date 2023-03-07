@@ -1,7 +1,7 @@
 //student ID: 2034032  name: chang liu
 //student ID: 1081733  name: Li Nan Kan
 import java.util.HashMap;
-
+import java.io.*;
 
 public class Validator {
 	
@@ -114,7 +114,7 @@ public class Validator {
 		if(strLength == 0 || !isAlphaNum(strBeforeAt.charAt(0)))
 			return false;
 		// iterate every character of prefix	
-		for(int i = 1; i < strLength; i ++) {
+		for(int i = 1; i <strLength; i ++) {
 			char charEvery  = strBeforeAt.charAt(i);
 			if(!isPrefixChar(charEvery))// if character is not prefix character,return false
 					return false;
@@ -147,7 +147,7 @@ public class Validator {
 		// get the length of the domain string
 		int domainLength = strDomain.length();
 		// contain at least 4 characters:first portion one, second portion two, seperated by period
-		if(domainLength < 4)
+		if(domainLength <4)
 			return false;
 		// get the position of last period since the second portion contains only letters
 		int periodPostion = strDomain.lastIndexOf(".");
@@ -186,41 +186,76 @@ public class Validator {
 	}
 	
 	public static boolean isEmail(String strEmail) {
-		String strEmail = ( strBeforeAt + "@" + strDomain);
+		String strEmail = ( fetchBeforeAt + "@" + fetchAfterAt);
 		if (isPrefix == true;
 		    isDomain == true)
 		   return true;
 		else {
 			return false;}
 		}
+	
     public static String isUsername(String strUserName) {
-	
-	
+		
 		int strLength = strUserName.length();
 		    strLength <=7;
 		char UserNamechar  = strUserName.toCharArray();
 			 UserNamechar = ("."|| "-"+ charAlphaNum )
+					 
 		if (isAlphaNum    (UserNamechar, true)			
 		if (isSpecialChar (UserNamechar, true) 
 		if (isDomainChar  (UserNamechar, true)
-		return  strUserName
+		
+	    return  (strUserName.toLowerCase());
 		
 			else {
 						
 			return ("");}
 							
-	public static String SafePassword (String strSafePassWord ) {	
+	public static boolean SafePassword (String strSafePassWord ) {	
 		
 		int  strLength =strSafePassWord .length();
 		     strLength >=7 && <= 15;
-		char SafePassWordchar  = strSafePassWord.toCharArray();	 
-		SafePassWordchar = lowcamlcase  
-		if (isAlphaNum    (SafePassWordchar, true)	
+		    // Password is limites from 7 to 15 digits.
+		char SafePassWordchar  = strSafePassWord.toCharArray();	  
 		if (isSpecialChar (SafePassWordchar, true) 
-				
+		boolean capitalFlag = false;
+	    boolean lowerCaseFlag = false;
+	    boolean numberFlag = false;
+	    for(int i=0;i < str.length();i++) {
+	        ch = str.charAt(i);
+	        if( Character.isDigit(ch)) {
+	            numberFlag = true;
+	        }
+	        else if (Character.isUpperCase(ch)) {
+	            capitalFlag = true;
+	        } else if (Character.isLowerCase(ch)) {
+	            lowerCaseFlag = true;
+	        }
+	        if(numberFlag && capitalFlag && lowerCaseFlag)
+	            return true;
+	    }
+	    return false;
+	}		
 				return true;
 		else {
-			    return false;				
+			    return false;	
+    static int SafePassword(String str, String strSafePassWord) {
+			   
+			        
+			        String a[] = str.split(" ");
+			     // split the string by spaces in a
+			       
+			        int count = 0;
+			         // search for pattern in a
+			        for (int i = 0; i < a.length; i++)
+			        {
+			      
+			        if (strSafePassWord.equals(a[i]))
+			            count++; 
+			        // if match found increase count
+			        }
+			        if count >2
+			        return false;
 						
 	}}
 	
