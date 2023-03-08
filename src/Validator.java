@@ -1,5 +1,7 @@
 //student ID: 2034032  name: chang liu
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Validator {
@@ -182,5 +184,120 @@ public class Validator {
 		}
 		// if all the conditions are met,return true
 		return true;
+	}
+	
+	// check if a string is a valid email 
+	public static boolean isEmail(String strEmail) {
+		if(!singleAtSign(strEmail))// must contain only one @ symbol
+			return false;
+		if(!isPrefix(strEmail))// prefix must be in acceptable format
+			return false;
+		if(!isDomain(strEmail))// domain must be in acceptable format
+			return false;
+		//if all the conditions are met	
+		return true;
+			
+		
+	}
+	
+	// check if a string is a valid username
+	public static String isUsername(String strUsername) {
+		char[] charUsername = strUsername.toCharArray();
+		// flag whether contain alphanumeric character, initialize to false
+		boolean booAlphaNum = false;
+		// flag whether contains only alphanumeric, periods, dashes or an exclamation point.
+		boolean booLegalLetter = true;
+		// initialize the number of exclamation point variable to 0
+		int countExclamation = 0;
+		// must contain seven or less characters, but at least one
+		if(charUsername.length > 7 || charUsername.length < 1)
+			return "";//if condition not followed, return empty string
+		// must start with a period or dash
+		if(!isSpecialChar(charUsername[0], false))
+			return "";
+		
+		for(int i = 0; i < charUsername.length; i ++) {
+			char c = charUsername[i];
+			if(isAlphaNum(c)) {// if alphanumeric character
+				if(!booAlphaNum)
+					booAlphaNum = true;
+			}else {// if special character or an exclamation point
+				if(!isSpecialChar(c, false) && !(c == '!'))
+					return "";
+				if(c == '!')// if exclamation point, count ++
+					countExclamation ++;
+			}
+			
+		}
+		// if contains only alphanumeric, periods, dashes or an exclamation point. 
+		// and at least one alphanumeric, return lower case valid username
+		if(booAlphaNum && booLegalLetter && countExclamation <= 1)
+			return strUsername.toLowerCase();
+		else
+			return "";
+			
+	}
+	
+	// check if a string is considered a safe password
+	// String strPwd: represent the password to validate
+	public static boolean safePassword(String strPwd) {
+		char[] charPwd = strPwd.toCharArray();
+		// flag whether contains alphanumeric character
+		boolean booAlphaNum = false;
+		//flag whether contains upper case letter
+		boolean booUpperLetter = false;
+		//flag whether contains lower case letter
+		boolean booLowerLetter = false;
+		//flag whether contains number
+		boolean booNumber = false;
+		//flag whether contains special character" period,dash or underscore
+		boolean booSpecialChar = false;
+		// must contains minimum 7 maximum 15 characters
+		if(charPwd.length < 7 || charPwd.length > 15)
+			return false;
+		String patternIdenticalChar = "(.)\\1{2,}";
+		Pattern strPattern = Pattern.compile(patternIdenticalChar);
+		Matcher strMatcher = strPattern.matcher(strPwd);
+		while(strMatcher.find()) {
+			System.out.println(strMatcher.group());
+			return false;
+		}
+		
+		for(char c : charPwd) {
+			if(Character.isUpperCase(c) && !booUpperLetter) {
+				booUpperLetter = true;
+				if(!booAlphaNum)// if character is uppercase and booAlphaNum is false
+					booAlphaNum = true;
+				continue;
+			}
+			// if character is lowercase and booLowerLetter is false
+			if(Character.isLowerCase(c) && !booLowerLetter) {
+				booLowerLetter = true;
+				if(!booAlphaNum)
+					booAlphaNum = true;
+				continue;
+			}
+			// if character is digit and booNumber is false
+			if(Character.isDigit(c) && !booNumber ) {
+				booNumber = true;
+				if(!booAlphaNum)
+					booAlphaNum = true;
+				continue;
+				
+			}
+			// if character is period,dash or underscore and booSpecialChar is false
+			if(isSpecialChar(c, true) && !booSpecialChar) {
+				booSpecialChar = true;
+				continue;
+				
+			}
+				
+		}
+		// if all the conditions are met
+		if(booAlphaNum && booUpperLetter && booLowerLetter && booSpecialChar && booNumber) 
+			return true;
+		else 
+			return false;
+
 	}
 }
