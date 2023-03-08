@@ -210,13 +210,13 @@ public class Validator {
 		boolean booLegalLetter = true;
 		// initialize the number of exclamation point variable to 0
 		int countExclamation = 0;
-		// must contain seven or less characters, but at least one
-		if(charUsername.length > 7 || charUsername.length < 1)
-			return "";//if condition not followed, return empty string
 		// must start with a period or dash
 		if(!isSpecialChar(charUsername[0], false))
 			return "";
-		//
+		// must contain seven or less characters, but at least one
+		if(charUsername.length > 7 || charUsername.length < 1)
+			return "";//if condition not followed, return empty string
+
 		for(int i = 0; i < charUsername.length; i ++) {
 			char c = charUsername[i];
 			if(isAlphaNum(c)) {// if alphanumeric character
