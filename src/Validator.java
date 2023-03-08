@@ -1,5 +1,5 @@
 //student ID: 2034032  name: chang liu
-import java.util.HashMap;
+//student ID: 1081733  name: Li Nan Kan
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,7 +14,12 @@ public class Validator {
 //		System.out.println(isDomainChar('9'));
 //		System.out.println(singleAtSign("abcSabc@@"));
 //		System.out.println(fetchBeforeAt("abcd@abc"));
-
+//		System.out.println(fetchAfterAt("@c"));
+//		System.out.println(isPrefix(""));
+//		System.out.println(isDomain("-.c1c"));
+//		System.out.println(isEmail("user-.name@yulyahoo..com"));
+		System.out.println(safePassword("Pa51w0RDis0k"));
+//		System.out.println(isUsername("-AA1aa!"));
 	}
 	
 	// Check if a character is alphanumeric.
@@ -105,10 +110,8 @@ public class Validator {
 	}
 	
 	// check if the start of a string is valid email prefix
-	// String strEmail : represent the email string to validate
-	public static boolean isPrefix(String strEmail) {
-		// fetch the string before @ sign
-		String strBeforeAt = fetchBeforeAt(strEmail);
+	// String strBeforeAt : represent the prefix to validate
+	public static boolean isPrefix(String strBeforeAt) {
 		// calculate the length of the prefix of email
 		int strLength = strBeforeAt.length();
 		// if the prefix has no character or the first character is not alphanumeric,return false
@@ -142,9 +145,7 @@ public class Validator {
 	
 	// check if the end of a string is a valid email domain
 	// String strEmail : represent the email string to validate
-	public static boolean isDomain(String strEmail) {
-		// fetch the string after @ symbol
-		String strDomain = fetchAfterAt(strEmail);
+	public static boolean isDomain(String strDomain) {
 		// get the length of the domain string
 		int domainLength = strDomain.length();
 		// contain at least 4 characters:first portion one, second portion two, seperated by period
@@ -158,9 +159,9 @@ public class Validator {
 		// get the first portion of the domain
 		String strBeforePeriod = strDomain.substring(0,periodPostion);
 		// get the second portion of the domain
-		String strAfterPeriod = strDomain.substring(periodPostion+1);
+		String strAfterPeriod = strDomain.substring(periodPostion + 1);
 		// check if the first portion meet the conditions required
-		for(int i = 0; i < strBeforePeriod.length(); i++) {
+		for(int i = 0; i < strBeforePeriod.length(); i ++) {
 			char charAtI = strBeforePeriod.charAt(i);
 			if(!isDomainChar(charAtI))// if the character is not domain character,return false
 				return false;
@@ -190,9 +191,9 @@ public class Validator {
 	public static boolean isEmail(String strEmail) {
 		if(!singleAtSign(strEmail))// must contain only one @ symbol
 			return false;
-		if(!isPrefix(strEmail))// prefix must be in acceptable format
+		if(!isPrefix(fetchBeforeAt(strEmail)))// prefix must be in acceptable format
 			return false;
-		if(!isDomain(strEmail))// domain must be in acceptable format
+		if(!isDomain(fetchAfterAt(strEmail)))// domain must be in acceptable format
 			return false;
 		//if all the conditions are met	
 		return true;
@@ -215,7 +216,7 @@ public class Validator {
 		// must start with a period or dash
 		if(!isSpecialChar(charUsername[0], false))
 			return "";
-		
+		//
 		for(int i = 0; i < charUsername.length; i ++) {
 			char c = charUsername[i];
 			if(isAlphaNum(c)) {// if alphanumeric character
@@ -242,7 +243,6 @@ public class Validator {
 	// String strPwd: represent the password to validate
 	public static boolean safePassword(String strPwd) {
 		char[] charPwd = strPwd.toCharArray();
-		// flag whether contains alphanumeric character
 		boolean booAlphaNum = false;
 		//flag whether contains upper case letter
 		boolean booUpperLetter = false;
@@ -259,11 +259,11 @@ public class Validator {
 		Pattern strPattern = Pattern.compile(patternIdenticalChar);
 		Matcher strMatcher = strPattern.matcher(strPwd);
 		while(strMatcher.find()) {
-			System.out.println(strMatcher.group());
 			return false;
 		}
 		
 		for(char c : charPwd) {
+			// if character is uppercase and booUpperLetter is false
 			if(Character.isUpperCase(c) && !booUpperLetter) {
 				booUpperLetter = true;
 				if(!booAlphaNum)// if character is uppercase and booAlphaNum is false
